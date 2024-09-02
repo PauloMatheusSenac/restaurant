@@ -92,6 +92,7 @@ class Sistema:
         self.menu_window = tk.Tk()
         self.menu_window.title("Menu")
         self.menu_window.geometry("400x800")
+        
 
         menu_label = tk.Label(self.menu_window, text=f"Olá {usuario}, SEJA BEM VINDO", font=("Arial", 20))
         menu_label.grid(row=0, column=0, sticky="nw", padx=20, pady=20)
@@ -134,21 +135,21 @@ class Sistema:
         desc_menu_chef = tk.Label(self.menu_window, text="MENU DO CHEF", font=("Arial", 10))
         desc_menu_chef.grid(row=6, column=0, sticky="ne", padx=50)
 
-        botao_pedidos = tk.Button(self.menu_window, image=tk_pedidos, command=self.finalize_order)
+        botao_pedidos = tk.Button(self.menu_window, image=tk_pedidos, command=self.finalizar_pedido)
         botao_pedidos.grid(row=7, column=0, pady=20, padx=50, sticky="s")
         desc_pedidos = tk.Label(self.menu_window, text="CONFIRMAR PEDIDO", font=("Arial", 10))
         desc_pedidos.grid(row=8, column=0, sticky="s", padx=50)
 
         self.menu_window.mainloop()
 
-    def categorias(self, category):
-        self.category_window = tk.Tk()
-        self.category_window.title(f"{category.capitalize()} - Seleção")
-        self.category_window.geometry("600x600")
+    def categorias(self, categoria):
+        self.janela_categoria = tk.Tk()
+        self.janela_categoria.title(f"{categoria.capitalize()} - Seleção")
+        self.janela_categoria.geometry("600x600")
 
-        tk.Label(self.category_window, text=f"Selecione {category.capitalize()}", font=("Arial", 20)).pack(pady=20)
+        tk.Label(self.janela_categoria, text=f"Selecione {categoria.capitalize()}", font=("Arial", 20)).pack(pady=20)
 
-        products = {
+        produtos = {
             "entradas": ["Salada", "Bruschetta", "Crostini", "Sopa", "Queijo Assado"],
             "pratos": ["Espaguete", "Bife", "Frango", "Peixe", "Pizza"],
             "bebidas": ["Coca-Cola", "Suco de Laranja", "Água", "Refrigerante", "Chá"],
@@ -159,41 +160,42 @@ class Sistema:
         
     
 
-        for product in products[category]:
-            tk.Button(self.category_window, text=product, font= 40, command=lambda p=product: self.add_to_order(p)).pack(pady=20)
+        for produto in produtos[categoria]:
+            tk.Button(self.janela_categoria, text=produto, font= 40, command=lambda p=produto: self.adicionar(p)).pack(pady=20)
 
 
 
-        tk.Button(self.category_window, text="Finalizar Pedido", font= 40, command=self.finalize_order).pack(pady=20)
+        tk.Button(self.janela_categoria, text="Finalizar Pedido", font= 40, command=self.finalizar_pedido).pack(pady=20)
 
-    def add_to_order(self, product):
-        self.pedidos.append(product)
-        messagebox.showinfo("Adicionado", f"{product} foi adicionado ao seu pedido.")
+    def adicionar(self, produto):
+        self.pedidos.append(produto)
+        messagebox.showinfo("Adicionado", f"{produto} foi adicionado ao seu pedido.")
 
-    def finalize_order(self):
-        self.category_window.destroy()  
-        self.order_window = tk.Tk()
-        self.order_window.title("Seu Pedido")
-        self.order_window.geometry("400x400")
+    def finalizar_pedido(self):
+        self.janela_categoria.destroy()  
+        self.janela_pedido = tk.Tk()
+        self.janela_pedido.title("Seu Pedido")
+        self.janela_pedido.geometry("400x400")
 
-        tk.Label(self.order_window, text="Seu Pedido", font=("Arial", 20)).pack(pady=20)
+        tk.Label(self.janela_pedido, text="Seu Pedido", font=("Arial", 20)).pack(pady=20)
 
         for item in self.pedidos:
-            tk.Label(self.order_window, text=item).pack(pady=5)
+            tk.Label(self.janela_pedido, text=item).pack(pady=5)
 
-        tk.Button(self.order_window, text="Adicionar Mais Itens", command=self.menu).pack(pady=10)
-        tk.Button(self.order_window, text="Confirmar Pedido", command=self.confirmar_pedido).pack(pady=10)
+        #tk.Button(self.janela_pedido, text="Adicionar Mais Itens", command=self.menu).pack(pady=10)
+        tk.Button(self.janela_pedido, text="Adicionar Mais Itens", command=lambda: [self.janela_pedido.destroy(), self.menu()]).pack(pady=10)
+        tk.Button(self.janela_pedido, text="Confirmar Pedido", command=self.confirmar_pedido).pack(pady=10)
 
     def confirmar_pedido(self):
-        self.order_window.destroy()
-        self.confirmation_window = tk.Tk()
-        self.confirmation_window.title("Pedido Confirmado")
-        self.confirmation_window.geometry("400x100")
-        vlw = tk.Label(self.confirmation_window, text="OBRIGADO PELO PEDIDO", font=("Arial", 20))
+        self.janela_pedido.destroy()
+        self.janela_confirmacao = tk.Tk()
+        self.janela_confirmacao.title("Pedido Confirmado")
+        self.janela_confirmacao.geometry("400x100")
+        vlw = tk.Label(self.janela_confirmacao, text="OBRIGADO PELO PEDIDO", font=("Arial", 20))
         vlw.grid(row=0, column=0, sticky="nw", padx=20, pady=20)
 
         
-        self.confirmation_window.mainloop()
+        self.janela_confirmacao.mainloop()
 
 Sistema()
 
